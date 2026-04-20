@@ -222,6 +222,19 @@ Fact {
 }
 ```
 
+### 4.3.1 Truth and evidence role rules
+
+- `Metric` is a definition object, not an observed value.
+- `Fact` is the unit of truth for displayed values and must carry provenance, verification status, freshness, coverage state, and supersession state.
+- `Computation` is the deterministic derivation record for a produced value and explains how displayed numbers were calculated from structured inputs.
+- `Claim` is an extracted assertion from evidence and is not canonical truth.
+- `Event` is the unit of state change assembled from claims and source references.
+- `EntityImpact` routes a claim onto affected subjects for feed ranking, alerting, and agent relevance.
+- `Finding` is a user-facing product artifact built from a sealed snapshot over the evidence graph.
+- Documents are evidence, not truth.
+- Facts are immutable except through supersession or explicit invalidation.
+- Verification status remains attached to facts so downstream consumers can distinguish authoritative values from candidate, corroborated, or disputed values.
+
 ### 4.4 Claims, events, impacts, computations
 
 ```ts
@@ -482,6 +495,14 @@ Owns company profile, statements, ratios, holders, insiders, estimates, and fisc
 
 ### 6.4 Evidence service
 Owns sources, documents, mentions, claims, claim arguments, impacts, events, facts, computations, clusters, snapshots, provenance, and evidence bundles.
+
+### 6.4.1 Downstream consumer rules for truth and evidence objects
+
+- Fundamentals consumes `Metric`, `Fact`, and `Computation` as the canonical value layer and may read claims or events only for explanatory context.
+- Evidence extraction owns `Source`, `Document`, `Mention`, `Claim`, `ClaimArgument`, `ClaimEvidence`, `ClaimCluster`, `Event`, and `EntityImpact`.
+- Home feed consumes Finding, SnapshotManifest, and ClaimCluster as the deduped product artifact layer.
+- Agent workflows consume `SnapshotManifest`, `Finding`, `RunActivity`, `ClaimCluster`, and `EntityImpact`.
+- Reader and extraction flows may ingest raw documents; analyst and user-facing flows must operate on structured facts, claims, events, snapshots, findings, and evidence bundles instead of raw untrusted text.
 
 ### 6.5 Filing extraction platform
 Owns filing retrieval, section parsing, extension handling, segment extraction, footnote extraction, management claim extraction, event detection, and reviewer queues.

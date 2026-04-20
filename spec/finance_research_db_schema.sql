@@ -308,6 +308,9 @@ create table event_subjects (
 create index event_subjects_subject_idx on event_subjects(subject_kind, subject_id);
 create index event_subjects_event_idx on event_subjects(event_id);
 
+-- Truth and evidence contract:
+-- facts are immutable except through supersession or invalidation.
+-- verification_status and source_id preserve provenance and promotion state for displayed values.
 create table facts (
   fact_id uuid primary key default gen_random_uuid(),
   subject_kind subject_kind not null,
@@ -357,6 +360,7 @@ create table computations (
   created_at timestamptz not null default now()
 );
 
+-- claims remain evidence-layer assertions rather than canonical truth.
 create table snapshots (
   snapshot_id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
@@ -440,6 +444,7 @@ create table findings (
   summary_blocks jsonb not null,
   created_at timestamptz not null default now()
 );
+-- findings must point at a sealed snapshot and remain user-facing artifacts.
 create index findings_agent_created_idx on findings(agent_id, created_at desc);
 
 create table run_activities (

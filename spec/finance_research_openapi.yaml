@@ -761,6 +761,7 @@ components:
             $ref: '#/components/schemas/SubjectRef'
     Fact:
       type: object
+      description: Facts are the unit of truth for displayed values.
       properties:
         fact_id:
           type: string
@@ -824,6 +825,7 @@ components:
                   $ref: '#/components/schemas/SeriesPoint'
     Claim:
       type: object
+      description: Claims are extracted assertions from evidence, not canonical truth.
       properties:
         claim_id:
           type: string
@@ -842,6 +844,7 @@ components:
           type: string
     Event:
       type: object
+      description: Events are state changes assembled from claims and source references.
       properties:
         event_id:
           type: string
@@ -875,6 +878,7 @@ components:
           type: string
     SnapshotManifest:
       type: object
+      description: Snapshot manifests seal the exact fact, claim, event, and source references that support an answer or finding at a specific as_of.
       properties:
         snapshot_id:
           type: string
@@ -991,6 +995,7 @@ components:
               additionalProperties: true
     Finding:
       type: object
+      description: Findings are snapshotted product artifacts built from evidence graph objects.
       properties:
         finding_id:
           type: string
