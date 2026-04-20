@@ -585,6 +585,31 @@ Key design rules:
 - `Sources` is required whenever external evidence was used
 - `Disclosure` can be injected by the orchestrator
 
+### 8.1 Block schema contract and render rules
+
+- Assistant output is always a typed `Block[]` response envelope, not plain markdown and not a tool call.
+- Every block kind inherits the `BaseBlock` contract: `id`, `kind`, `snapshot_id`, `data_ref`, `source_refs`, and `as_of`.
+- The canonical schema field is `data_ref`.
+- Earlier analysis used `dataRef` or `queryRef`; the schema standardizes this as `data_ref`.
+- Narrative and layout blocks: `rich_text`, `section`
+- Tabular and compact metric blocks: `metric_row`, `table`
+- Chart and comparison blocks: `line_chart`, `revenue_bars`, `perf_comparison`, `segment_donut`, `segment_trajectory`, `metrics_comparison`, `sentiment_trend`, `mention_volume`
+- Research and evidence summary blocks: `analyst_consensus`, `price_target_range`, `eps_surprise`, `filings_list`, `news_cluster`, `finding_card`
+- Trust and rendering-boundary blocks: `sources`, `disclosure`
+- `Sources` is the required provenance surface whenever external evidence appears in the answer.
+- `Disclosure` is the explicit trust and compliance surface and may be injected by orchestration.
+- `as_of` is the freshness boundary for the rendered artifact.
+
+### 8.2 Downstream consumer rules for block artifacts
+
+- Thread coordinator and transport (`P2.1`) consumes `Block[]` as the streamed and persisted assistant payload.
+- Block registry versioning and validation (`P2.3`) consumes the exact block kinds plus the shared `BaseBlock` fields.
+- Snapshot assembler and verifier (`P2.4`) consumes `snapshot_id`, `source_refs`, `data_ref`, and `as_of` to verify rendered artifacts against sealed evidence.
+- Findings, home feed, and explainability (`P4.2`, `P4.3`, `P4.6`) consume `finding_card`, `sources`, `disclosure`, and the same snapshot-safe render rules used in chat and analyze.
+- Frontend renderer (`PX.3`) consumes `Block[]` via a shared `BlockRegistry` and must not treat rendering as a tool invocation.
+- Chat, Analyze, and agent-produced findings all render through the same `BlockRegistry`, keyed by block `kind`.
+- Interactivity stays inside snapshot scope unless the user explicitly refreshes.
+
 ## 9. Tool registry
 
 The normative analyst tool registry is in `finance_research_tool_registry.json`.
