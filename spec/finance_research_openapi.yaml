@@ -739,15 +739,7 @@ components:
       description: Canonical subject discriminator. Ticker is a listing locator, not canonical identity.
       enum: [issuer, instrument, listing, theme, macro_topic, portfolio, screen]
     SubjectRef:
-      type: object
-      description: kind determines whether the id points to an issuer, instrument, listing, theme, macro topic, portfolio, or screen.
-      required: [kind, id]
-      properties:
-        kind:
-          $ref: '#/components/schemas/SubjectKind'
-        id:
-          type: string
-          format: uuid
+      $ref: './finance_research_block_schema.json#/$defs/SubjectRef'
     ResolvedSubject:
       type: object
       description: Resolver result carrying a canonical subject reference plus any lower-confidence alternatives.

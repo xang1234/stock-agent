@@ -9,6 +9,20 @@ SCHEMA_PATH = ROOT / "spec" / "finance_research_block_schema.json"
 OPENAPI_PATH = ROOT / "spec" / "finance_research_openapi.yaml"
 
 
+def _yaml_section(text: str, section_name: str) -> str:
+    lines = text.splitlines()
+    header = f"    {section_name}:"
+    for start, line in enumerate(lines):
+        if line == header:
+            section_lines = [line]
+            for following in lines[start + 1 :]:
+                if following.startswith("    ") and not following.startswith("      "):
+                    break
+                section_lines.append(following)
+            return "\n".join(section_lines) + "\n"
+    raise AssertionError(f"Section {section_name!r} not found")
+
+
 class BlockSchemaContractTest(unittest.TestCase):
     def test_spec_declares_block_bindings_and_consumers(self) -> None:
         spec_text = SPEC_PATH.read_text()
@@ -61,11 +75,20 @@ class BlockSchemaContractTest(unittest.TestCase):
 
     def test_openapi_block_envelope_uses_typed_block_schema(self) -> None:
         openapi_text = OPENAPI_PATH.read_text()
-        self.assertIn("BlockEnvelope:", openapi_text)
-        self.assertIn("blocks:", openapi_text)
+        block_envelope = _yaml_section(openapi_text, "BlockEnvelope")
+        self.assertIn("      properties:\n", block_envelope)
+        self.assertIn("        blocks:\n", block_envelope)
+        self.assertIn("          type: array\n", block_envelope)
         self.assertIn(
-            "$ref: './finance_research_block_schema.json#/$defs/Block'",
-            openapi_text,
+            "            $ref: './finance_research_block_schema.json#/$defs/Block'\n",
+            block_envelope,
+        )
+
+        subject_ref = _yaml_section(openapi_text, "SubjectRef")
+        self.assertEqual(
+            subject_ref,
+            "    SubjectRef:\n"
+            "      $ref: './finance_research_block_schema.json#/$defs/SubjectRef'\n",
         )
 
     def test_schema_subject_refs_and_closed_variants(self) -> None:
@@ -102,8 +125,14 @@ class BlockSchemaContractTest(unittest.TestCase):
         }
         self.assertGreater(len(closed_variants), 0)
         for block_name, variant in closed_variants.items():
-            self.assertFalse(
-                variant.get("unevaluatedProperties"),
+            self.assertIn(
+                "unevaluatedProperties",
+                variant,
+                msg=f"{block_name} must declare unevaluatedProperties",
+            )
+            self.assertIs(
+                variant["unevaluatedProperties"],
+                False,
                 msg=f"{block_name} must reject unexpected top-level properties",
             )
 
