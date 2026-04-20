@@ -519,6 +519,35 @@ Owns cross-agent findings feed generation, cluster dedupe, and ranking.
 ### 6.9 Notification service
 Owns email, push, SMS, and digest delivery.
 
+## 6A. Relational schema contract
+
+### Reference and universe tables
+
+- `issuers`, `instruments`, `listings`, `themes`, `theme_memberships`, `portfolios`, `portfolio_holdings`, `watchlists`, and `watchlist_members` define reusable subject context and membership state.
+- This family supports identity resolution, subject scoping, and user-curated universes without becoming part of the evidence graph.
+
+### Evidence-plane relational tables
+
+- `metrics`, `sources`, `documents`, `mentions`, `claims`, `claim_arguments`, `entity_impacts`, `claim_evidence`, `claim_clusters`, `claim_cluster_members`, `events`, `event_subjects`, `facts`, `computations`, `snapshots`, `findings`, `run_activities`, `citation_logs`, `verifier_fail_logs`, and `eval_run_results` form the relational evidence plane.
+- This family holds provenance, auditability, promotion state, snapshotted findings, and the fact or claim or event model that downstream services depend on directly.
+
+### App metadata and orchestration tables
+
+- `users`, `chat_threads`, `chat_messages`, `analyze_templates`, `agents`, and `tool_call_logs` support user state, orchestration, and workflow coordination around the evidence plane.
+- These tables may reference snapshots, findings, or subject refs, but they do not replace the canonical evidence-plane tables.
+
+### Storage split
+
+- App metadata may live in smaller app storage such as D1 or Postgres, depending on deployment constraints.
+- Evidence objects and snapshots belong to the relational evidence plane and should live in Postgres-class storage that preserves relational integrity and auditability.
+- Raw document bytes are outside the relational schema.
+
+### Snapshot bridge
+
+- `snapshots` are evidence-plane records rather than ordinary app metadata.
+- Snapshots seal the refs that support answers and findings at a specific `as_of`.
+- Snapshots bridge the evidence plane to user-facing artifacts.
+
 ## 7. API contracts
 
 The normative API surface is defined in `finance_research_openapi.yaml`.

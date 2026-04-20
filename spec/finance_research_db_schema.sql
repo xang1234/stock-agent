@@ -4,6 +4,11 @@
 -- 1. App metadata may live in D1/Postgres. Evidence plane should live in Postgres.
 -- 2. subject_kind + subject_id is used where a cross-table reference is required.
 -- 3. Generated columns, partitioning, and advanced indexes are omitted where vendor-specific.
+-- Table families:
+-- reference and universe tables define reusable subject context and membership state.
+-- evidence-plane relational tables hold provenance, facts, claims, events, and snapshots.
+-- app metadata and orchestration tables support user state and workflow coordination.
+-- raw document bytes live outside the relational schema and are referenced by metadata.
 -- Identity contract:
 -- issuer = reporting entity; instrument = tradable security definition; listing = venue-specific symbol.
 -- ticker is a listing locator, not canonical identity.
