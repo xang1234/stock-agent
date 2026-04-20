@@ -2,11 +2,12 @@ openapi: 3.1.0
 info:
   title: Finance Research App API
   version: 1.0.0
-  description: Core contracts for subjects, market, fundamentals, evidence, snapshots, chat, analyze, agents, home, watchlists, and screener.
+  description: Core contracts for subjects, market, fundamentals, evidence, snapshots, chat, analyze, agents, home, watchlists, and screener. The /v1 API is the client-facing backend-for-frontend surface.
 servers:
   - url: https://api.example.com
 security:
   - bearerAuth: []
+# Contract rule: Clients must not call third-party providers directly.
 tags:
   - name: Subjects
   - name: Market
@@ -337,6 +338,7 @@ paths:
     post:
       tags: [Snapshots]
       summary: Apply an allowed transform to a sealed snapshot
+      description: Snapshot transforms are backend-mediated interactions over sealed snapshots.
       operationId: transformSnapshot
       parameters:
         - in: path
@@ -447,6 +449,7 @@ paths:
     get:
       tags: [Chat]
       summary: SSE stream for a thread run
+      description: SSE chat streaming is a backend-mediated run transport.
       operationId: streamThread
       parameters:
         - in: path

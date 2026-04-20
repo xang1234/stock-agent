@@ -565,6 +565,14 @@ Top-level route groups:
 - `/v1/watchlists/*`
 - `/v1/screener/*`
 
+### 7.1 HTTP API ownership and consumer rules
+
+- `Subjects`, `Market`, `Fundamentals`, `Evidence`, `Snapshots`, `Chat`, `Analyze`, `Agents`, `Home`, `Watchlists`, and `Screener` are the stable endpoint groups exposed to clients.
+- The frontend only talks to `/v1/*` backend contracts.
+- The frontend does not call third-party providers directly.
+- `Chat` plus `Snapshots` define the run, stream, and render boundary.
+- Interactive updates such as snapshot transforms, chat streaming, and market refreshes stay inside backend-managed endpoints rather than bypassing the API layer.
+
 ## 8. Block model
 
 Assistant output is always a `Block[]` envelope. The normative JSON Schema is in `finance_research_block_schema.json`.
