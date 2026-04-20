@@ -17,6 +17,21 @@
       "type": "string",
       "pattern": "^[0-9a-fA-F-]{36}$"
     },
+    "SubjectKind": {
+      "type": "string",
+      "description": "Canonical subject discriminator. Ticker is a listing locator, not canonical identity.",
+      "enum": ["issuer", "instrument", "listing", "theme", "macro_topic", "portfolio", "screen"]
+    },
+    "SubjectRef": {
+      "type": "object",
+      "description": "kind determines whether the id points to an issuer, instrument, listing, theme, macro topic, portfolio, or screen.",
+      "required": ["kind", "id"],
+      "properties": {
+        "kind": { "$ref": "#/$defs/SubjectKind" },
+        "id": { "$ref": "#/$defs/UUID" }
+      },
+      "additionalProperties": false
+    },
     "DisclosureTier": {
       "type": "string",
       "enum": ["real_time", "delayed_15m", "eod", "filing_time", "estimate", "candidate", "tertiary_source"]
@@ -61,8 +76,7 @@
         "title": { "type": "string" },
         "disclosure_tier": { "$ref": "#/$defs/DisclosureTier" },
         "interactive": { "$ref": "#/$defs/InteractiveSpec" }
-      },
-      "additionalProperties": true
+      }
     },
     "TextSegment": {
       "type": "object",
@@ -101,7 +115,8 @@
               }
             }
           },
-          "required": ["segments"]
+          "required": ["segments"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -118,7 +133,8 @@
             },
             "collapsible": { "type": "boolean" }
           },
-          "required": ["children"]
+          "required": ["children"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -145,7 +161,8 @@
               "items": { "$ref": "#/$defs/MetricCell" }
             }
           },
-          "required": ["items"]
+          "required": ["items"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -159,7 +176,8 @@
             "columns": { "type": "array", "items": { "type": "string" } },
             "rows": { "type": "array", "items": { "type": "array", "items": { "type": ["string", "number", "object"] } } }
           },
-          "required": ["columns", "rows"]
+          "required": ["columns", "rows"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -194,7 +212,8 @@
             "x_type": { "type": "string", "enum": ["time", "category"] },
             "y_format": { "type": "string" }
           },
-          "required": ["series", "x_type"]
+          "required": ["series", "x_type"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -219,7 +238,8 @@
               }
             }
           },
-          "required": ["bars"]
+          "required": ["bars"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -230,12 +250,13 @@
           "type": "object",
           "properties": {
             "kind": { "const": "perf_comparison" },
-            "subject_refs": { "type": "array", "items": { "type": "object" } },
+            "subject_refs": { "type": "array", "items": { "$ref": "#/$defs/SubjectRef" } },
             "default_range": { "type": "string" },
             "basis": { "type": "string" },
             "normalization": { "type": "string", "enum": ["raw", "pct_return", "index_100"] }
           },
-          "required": ["subject_refs", "default_range", "basis", "normalization"]
+          "required": ["subject_refs", "default_range", "basis", "normalization"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -261,7 +282,8 @@
             },
             "coverage_warnings": { "type": "array", "items": { "type": "string" } }
           },
-          "required": ["segments"]
+          "required": ["segments"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -274,7 +296,8 @@
             "kind": { "const": "segment_trajectory" },
             "series": { "type": "array", "items": { "$ref": "#/$defs/Series" } }
           },
-          "required": ["series"]
+          "required": ["series"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -285,10 +308,11 @@
           "type": "object",
           "properties": {
             "kind": { "const": "metrics_comparison" },
-            "subjects": { "type": "array", "items": { "type": "object" } },
+            "subjects": { "type": "array", "items": { "$ref": "#/$defs/SubjectRef" } },
             "metrics": { "type": "array", "items": { "type": "string" } }
           },
-          "required": ["subjects", "metrics"]
+          "required": ["subjects", "metrics"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -314,7 +338,8 @@
             },
             "coverage_warning": { "type": "string" }
           },
-          "required": ["analyst_count_ref", "distribution"]
+          "required": ["analyst_count_ref", "distribution"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -331,7 +356,8 @@
             "high_ref": { "$ref": "#/$defs/UUID" },
             "upside_ref": { "$ref": "#/$defs/UUID" }
           },
-          "required": ["current_price_ref", "low_ref", "avg_ref", "high_ref"]
+          "required": ["current_price_ref", "low_ref", "avg_ref", "high_ref"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -357,7 +383,8 @@
               }
             }
           },
-          "required": ["quarters"]
+          "required": ["quarters"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -383,7 +410,8 @@
               }
             }
           },
-          "required": ["items"]
+          "required": ["items"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -399,7 +427,8 @@
             "claim_refs": { "type": "array", "items": { "$ref": "#/$defs/UUID" } },
             "document_refs": { "type": "array", "items": { "$ref": "#/$defs/UUID" } }
           },
-          "required": ["cluster_id", "headline", "claim_refs"]
+          "required": ["cluster_id", "headline", "claim_refs"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -413,9 +442,10 @@
             "finding_id": { "$ref": "#/$defs/UUID" },
             "headline": { "type": "string" },
             "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
-            "subject_refs": { "type": "array", "items": { "type": "object" } }
+            "subject_refs": { "type": "array", "items": { "$ref": "#/$defs/SubjectRef" } }
           },
-          "required": ["finding_id", "headline", "severity"]
+          "required": ["finding_id", "headline", "severity"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -428,7 +458,8 @@
             "kind": { "const": "sentiment_trend" },
             "series": { "type": "array", "items": { "$ref": "#/$defs/Series" } }
           },
-          "required": ["series"]
+          "required": ["series"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -441,7 +472,8 @@
             "kind": { "const": "mention_volume" },
             "series": { "type": "array", "items": { "$ref": "#/$defs/Series" } }
           },
-          "required": ["series"]
+          "required": ["series"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -467,7 +499,8 @@
               }
             }
           },
-          "required": ["items"]
+          "required": ["items"],
+          "unevaluatedProperties": false
         }
       ]
     },
@@ -481,7 +514,8 @@
             "kind": { "const": "disclosure" },
             "items": { "type": "array", "items": { "type": "string" } }
           },
-          "required": ["items"]
+          "required": ["items"],
+          "unevaluatedProperties": false
         }
       ]
     },

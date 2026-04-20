@@ -917,8 +917,7 @@ components:
         blocks:
           type: array
           items:
-            type: object
-            additionalProperties: true
+            $ref: './finance_research_block_schema.json#/$defs/Block'
     AnalyzeTemplateInput:
       type: object
       required: [name, prompt_template, source_categories]
