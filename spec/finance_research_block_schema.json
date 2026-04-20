@@ -19,7 +19,7 @@
     },
     "DisclosureTier": {
       "type": "string",
-      "enum": ["real_time", "delayed_15min", "eod", "filing_time", "estimate", "candidate", "tertiary_source"]
+      "enum": ["real_time", "delayed_15m", "eod", "filing_time", "estimate", "candidate", "tertiary_source"]
     },
     "DataRef": {
       "description": "Canonical backend binding for a block. Historical dataRef/queryRef language maps to data_ref in this schema.",
