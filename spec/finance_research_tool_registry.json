@@ -1,11 +1,13 @@
 {
   "version": "1.0.0",
+  "description": "Normative tool registry for reader and analyst bundles. Tools are backend data and action surfaces; Block[] is the separate response artifact contract.",
   "design_rules": [
     "System selects tool bundle; model selects tools within the bundle.",
     "Reader-only tools may access raw untrusted content; analyst-facing tools may not.",
     "Tool inputs and outputs must validate against JSON Schema.",
     "All outputs must be traceable to source refs or deterministic computations.",
-    "Side-effecting tools return pending actions unless policy explicitly auto-approves them."
+    "Side-effecting tools return pending actions unless policy explicitly auto-approves them.",
+    "Non-read-only tools remain write-intent policy boundaries even when approval_required is false."
   ],
   "bundles": [
     {
@@ -1821,7 +1823,7 @@
         "theme_research",
         "agent_management"
       ],
-      "description": "Search raw document corpus before extraction.",
+      "description": "Reader-only raw document search surface for untrusted text retrieval before extraction.",
       "read_only": true,
       "approval_required": false,
       "cost_class": "medium",
@@ -1908,7 +1910,7 @@
         "theme_research",
         "agent_management"
       ],
-      "description": "Fetch raw document bytes and metadata for parsing or extraction.",
+      "description": "Reader-only raw document fetch surface for parsing or extraction.",
       "read_only": true,
       "approval_required": false,
       "cost_class": "low",
@@ -2272,7 +2274,7 @@
       "bundles": [
         "alert_management"
       ],
-      "description": "Create an alert pending user approval unless policy auto-approves the action.",
+      "description": "Approval-sensitive write-intent tool that returns a pending action until orchestration or the user confirms it.",
       "read_only": false,
       "approval_required": true,
       "cost_class": "low",
@@ -2356,7 +2358,7 @@
         "alert_management",
         "analyze_template_run"
       ],
-      "description": "Add a subject to a watchlist. May be auto-approved by policy.",
+      "description": "Write-intent tool that may be auto-approved by policy but remains a policy boundary.",
       "read_only": false,
       "approval_required": false,
       "cost_class": "low",
@@ -2432,7 +2434,7 @@
       "bundles": [
         "agent_management"
       ],
-      "description": "Create an agent definition pending explicit approval.",
+      "description": "Approval-sensitive write-intent tool that returns a pending action until explicit approval.",
       "read_only": false,
       "approval_required": true,
       "cost_class": "low",

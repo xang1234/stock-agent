@@ -614,12 +614,24 @@ Key design rules:
 
 The normative analyst tool registry is in `finance_research_tool_registry.json`.
 
-Design rules:
-- the system chooses the bundle; the model chooses tools within the bundle
-- tools are provider-agnostic and JSON-schema constrained
-- reader-only tools can touch raw text; analyst-facing tools cannot
-- side-effecting tools require approval
-- every tool output must be traceable to source refs or deterministic computation refs
+### 9.1 Tool registry and bundle rules
+
+- `spec/finance_research_tool_registry.json` is the normative artifact for bundle membership, tool audience, approval sensitivity, and JSON-schema-constrained inputs and outputs.
+- Tools are backend data and action surfaces; `Block[]` remains the response artifact contract.
+- The system chooses the bundle; the model chooses tools within the bundle.
+- Bundle groups: `quote_lookup`, `single_subject_analysis`, `peer_comparison`, `theme_research`, `segment_deep_dive`, `document_research`, `filing_research`, `screener`, `agent_management`, `alert_management`, and `analyze_template_run`.
+- `reader` tools are the only tools allowed to access raw untrusted text or raw documents.
+- `analyst` tools operate only on structured outputs, canonical subject and period resolution, evidence bundles, facts, claims, events, and approval-mediated write intents.
+- Raw text must not leak into analyst-facing tools.
+- Approval-sensitive tools today are `create_alert` and `create_agent`.
+- `add_to_watchlist` is a non-read-only write-intent tool even though it is not currently approval-required.
+
+### 9.2 Downstream consumer rules for tool runtime
+
+- Pre-resolve routing and budget policy (`P2.2`) depends on deterministic bundle selection, audience separation, and registry metadata before the analyst loop starts.
+- Document ingestion and extraction (`P3.2`) depends on raw document search, fetch, and extraction tools belonging to the `reader` audience.
+- Alerting and automation (`P5.1`) depends on side-effect categories and approval sensitivity so create and update flows do not execute directly from model output.
+- Tool runtime and orchestration (`PX.2`) depends on bundle membership, audience, `read_only`, `approval_required`, `cost_class`, and `freshness_expectation`.
 
 ## 10. Snapshot semantics
 
