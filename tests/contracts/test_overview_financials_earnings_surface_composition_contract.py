@@ -61,7 +61,7 @@ class OverviewFinancialsEarningsSurfaceCompositionContractTest(unittest.TestCase
             spec_text,
         )
         self.assertIn(
-            "Holders, signals or Reddit, and Analyze entry points remain outside this bead and layer onto the subject-detail shell after the core tab responsibilities are fixed.",
+            "Holders, signals, and `Analyze` entry points layer onto the same subject-detail shell through the dedicated integration and handoff rules below, and those additions must preserve the core tab responsibilities fixed in this bead.",
             spec_text,
         )
 

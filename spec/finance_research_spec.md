@@ -68,7 +68,7 @@ Symbol detail is an entered subject workspace with sections such as Overview, Fi
 - The core tab composition depends on hydrated subject identity, market quote and series services, fundamentals profile and statement services, aggregation outputs, and structured earnings events through backend contracts rather than direct provider payloads or chat-style tool loops.
 - Moving between `overview`, `financials`, and `earnings` preserves subject context and shell chrome; it is a local section transition, not a new top-level workspace or a fresh subject-resolution flow.
 - The tabs may link to one another through stable section destinations, but they must not collapse into one scrolling page or duplicate ownership of the same deterministic modules.
-- Holders, signals or Reddit, and Analyze entry points remain outside this bead and layer onto the subject-detail shell after the core tab responsibilities are fixed.
+- Holders, signals, and `Analyze` entry points layer onto the same subject-detail shell through the dedicated integration and handoff rules below, and those additions must preserve the core tab responsibilities fixed in this bead.
 
 ### 3.4.3 Downstream consumer rules for core symbol tabs
 
