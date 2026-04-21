@@ -701,6 +701,25 @@ Owns company profile, statements, ratios, holders, insiders, estimates, and fisc
 - Promotion rules for candidate facts (`P3.5`) depends on the rule that normalized statement values become `Fact` or `Computation` objects rather than a separate fundamentals-only truth store, so promotion and supersession work target the canonical value plane.
 - Non US identity data and coverage gaps (`P6.2`) depends on explicit metric ownership, basis handling, and issuer-oriented normalization rules so later international work can extend accounting mappings without weakening the canonical value contract.
 
+### 6.3.3 Stats, segment, and consensus aggregations
+
+- The fundamentals aggregation layer sits above normalized statement facts and canonical metrics and produces reusable read models for key stats, segment facts, analyst consensus, and comparison-ready derived outputs.
+- Aggregation outputs are service-level views, not replacements for canonical `Fact` or `Computation` rows, and they must keep their derivation inputs, freshness, and coverage assumptions explicit.
+- Key stats and derived ratios may combine normalized fundamentals, market context, and deterministic computations, but they must expose the basis, period, and `as_of` assumptions needed to explain each value.
+- Segment facts remain distinct from consolidated statement outputs: they carry segment axis, segment definitions, period context, and coverage warnings instead of flattening segment disclosures into issuer-level statement tables.
+- Analyst consensus remains distinct from both reported statements and promoted evidence facts: rating distributions, price-target summaries, analyst counts, and coverage warnings are service-level aggregates with explicit `as_of` semantics.
+- Comparison-ready derived outputs may package reusable aggregate slices for peer views or ranking-style surfaces, but they must not become an opaque cache of UI-specific payloads.
+- When aggregation inputs are incomplete, stale, or inconsistent, the service surfaces warnings and partial-coverage metadata instead of fabricating complete comparisons or silently filling gaps.
+- The aggregation layer may read canonical facts, computations, and provider-backed consensus or segment inputs, but provenance, supersession, and truth-promotion state remain owned by the canonical value plane.
+
+### 6.3.4 Downstream consumer rules for aggregation outputs
+
+- Symbol detail surfaces (`P1.3`) depends on separate stats, segment, and consensus aggregation families so overview, financials, and earnings modules can reuse deterministic read models instead of rebuilding UI-specific payloads from raw statements.
+- Pre-resolve router and budget policy (`P2.2`) depends on the distinction between normalized statement reads and aggregation-layer reads so routing can classify heavier fundamentals requests before the tool loop starts.
+- Specialized social and news blocks (`P4.6`) depends on reusable key stats and consensus outputs so narrative product blocks can cite stable aggregate envelopes without embedding ad hoc ratio or target-calculation logic.
+- Segment extraction refinement (`P6.1`) depends on segment aggregates preserving axis, definition, and coverage-warning semantics so harder extraction cases can evolve without changing the consumer-facing aggregation contract.
+- Non US identity data and coverage gaps (`P6.2`) depends on aggregation outputs keeping basis, freshness, and coverage assumptions explicit so later international expansion can widen issuer and provider coverage without pretending the aggregates are uniformly comparable.
+
 ### 6.4 Evidence service
 Owns sources, documents, mentions, claims, claim arguments, impacts, events, facts, computations, clusters, snapshots, provenance, and evidence bundles.
 
