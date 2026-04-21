@@ -51,11 +51,11 @@ class AuthSessionNavigationGuardrailsContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Session-scoped workspaces and flows are `Chat`, `Agents`, watchlists, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.",
+            "Session-scoped workspaces and flows are `Chat`, `Agents`, watchlist views and mutations, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.",
             spec_text,
         )
         self.assertIn(
-            "A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render public entry and carried `SubjectRef` context, while saving or reopening persisted runs requires a session.",
+            "A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render only a public entry state with carried `SubjectRef` context, while any user-owned draft, save, or persisted-run state requires a session.",
             spec_text,
         )
         self.assertIn(
@@ -110,7 +110,7 @@ class AuthSessionNavigationGuardrailsContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Screener surface and saved-screen handoff (`P1.4`) depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.",
+            "Screener surface and saved-screen handoff depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.",
             spec_text,
         )
         self.assertIn(
@@ -118,7 +118,7 @@ class AuthSessionNavigationGuardrailsContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Agent management and scheduling (`P5.1`) depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.",
+            "Agent management and scheduling depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.",
             spec_text,
         )
 
@@ -153,8 +153,8 @@ git commit -m "test: add auth session guardrail checks"
 - The persistent workspace shell is not auth-gated as a whole. Unauthenticated users may enter the shell and navigate public research routes.
 - Public browsing surfaces are `Home`, `Screener`, top-level `Analyze` entry, and entered symbol-detail routes.
 - Public browsing may render market data, fundamentals, findings, and subject context that do not depend on user-owned state or persisted session history.
-- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlists, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
-- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render public entry and carried `SubjectRef` context, while saving or reopening persisted runs requires a session.
+- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlist views and mutations, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
+- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render only a public entry state with carried `SubjectRef` context, while any user-owned draft, save, or persisted-run state requires a session.
 - Protected workspaces and routes use soft in-shell guards rather than replacing the shell with a separate auth-page model.
 - Unauthenticated navigation to `Chat`, `Agents`, watchlists, or any other session-scoped route keeps shell chrome visible and replaces protected main-canvas content with an auth gate for that destination.
 - The guard preserves intended destination context so successful sign-in can resume the same workspace, thread, agent view, watchlist view, or persisted run target.
@@ -174,9 +174,9 @@ git commit -m "test: add auth session guardrail checks"
 ### 3.11 Downstream consumer rules for auth and session work
 
 - Symbol overview and subject detail (`P1.3`) depends on the rule that entered subject detail may render public market, fundamentals, findings, and subject context without requiring a session.
-- Screener surface and saved-screen handoff (`P1.4`) depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.
+- Screener surface and saved-screen handoff depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.
 - Thread coordinator and transport (`P2.1`) depends on `Chat` being session-scoped even though it lives inside the same persistent shell as public routes.
-- Agent management and scheduling (`P5.1`) depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
+- Agent management and scheduling depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
 ```
 
 - [ ] **Step 3: Run the contract test and confirm green**

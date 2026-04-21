@@ -82,7 +82,7 @@ class AuthSessionNavigationGuardrailsContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Screener surface and saved-screen handoff (`P1.4`) depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.",
+            "Screener surface and saved-screen handoff depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.",
             spec_text,
         )
         self.assertIn(
@@ -90,7 +90,7 @@ class AuthSessionNavigationGuardrailsContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Agent management and scheduling (`P5.1`) depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.",
+            "Agent management and scheduling depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.",
             spec_text,
         )
 

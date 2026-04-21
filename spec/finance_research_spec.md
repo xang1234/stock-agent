@@ -114,9 +114,9 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 ### 3.11 Downstream consumer rules for auth and session work
 
 - Symbol overview and subject detail (`P1.3`) depends on the rule that entered subject detail may render public market, fundamentals, findings, and subject context without requiring a session.
-- Screener surface and saved-screen handoff (`P1.4`) depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.
+- Screener surface and saved-screen handoff depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.
 - Thread coordinator and transport (`P2.1`) depends on `Chat` being session-scoped even though it lives inside the same persistent shell as public routes.
-- Agent management and scheduling (`P5.1`) depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
+- Agent management and scheduling depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
 
 ## 4. Canonical domain model
 

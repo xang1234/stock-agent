@@ -25,8 +25,8 @@ This design does not choose an identity provider, auth library, org or role mode
 - The persistent workspace shell is not auth-gated as a whole. Unauthenticated users may enter the shell and navigate public research routes.
 - Public browsing surfaces are `Home`, `Screener`, top-level `Analyze` entry, and entered symbol-detail routes.
 - Public browsing may render market data, fundamentals, findings, and subject context that do not depend on user-owned state or persisted session history.
-- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlists, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
-- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render public entry and carried `SubjectRef` context, while saving or reopening persisted runs requires a session.
+- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlist views and mutations, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
+- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render only a public entry state with carried `SubjectRef` context, while any user-owned draft, save, or persisted-run state requires a session.
 - This contract is written in terms of authenticated session scope rather than a specific identity or entitlement backend.
 
 ### Navigation guards
@@ -53,9 +53,9 @@ This design does not choose an identity provider, auth library, org or role mode
 - `P1.3` depends on the rule that symbol overview and entered subject detail may render public market, fundamentals, findings, and subject context without requiring a session.
 - It also depends on user-owned actions from subject detail using inline auth interrupts with preserved return-to context rather than ejecting the user from symbol detail.
 
-### Screener surface and saved-screen handoff (`P1.4`)
+### Screener surface and saved-screen handoff
 
-- `P1.4` depends on `Screener` remaining publicly browsable inside the persistent shell.
+- Screener surface and saved-screen handoff depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.
 - Saved screens, watchlist handoffs, agent handoffs, and other user-scoped screener outputs depend on the session-scoped action rules and in-shell guards.
 
 ### Thread coordinator and transport (`P2.1`)
@@ -63,9 +63,9 @@ This design does not choose an identity provider, auth library, org or role mode
 - `P2.1` depends on `Chat` being session-scoped even though it lives inside the same persistent shell as public routes.
 - Thread routes must collapse to the in-shell auth gate on unauthenticated entry, logout, or session expiry while preserving return-to thread context.
 
-### Agent management and scheduling (`P5.1`)
+### Agent management and scheduling
 
-- `P5.1` depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
+- Agent management and scheduling depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
 - Agent creation, management, and scheduling entry points launched from public routes depend on inline auth interrupts or in-shell guards rather than a separate page model.
 
 ## Normative File Changes
@@ -84,4 +84,4 @@ This design does not choose an identity provider, auth library, org or role mode
 - The public-versus-session-scoped surface classification satisfies the auth and session assumption boundary.
 - Soft in-shell guards and inline auth interrupts satisfy the navigation behavior requirement without breaking the persistent shell model from `P0.2a`.
 - Session-loss collapse rules satisfy the route protection behavior for protected surfaces after logout or expiry.
-- The consumer matrix unblocks `P1.3`, `P1.4`, `P2.1`, and `P5.1`.
+- The consumer matrix unblocks `P1.3`, screener saved-screen handoff, `P2.1`, and agent management and scheduling.
