@@ -217,6 +217,21 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - Portfolio and watchlist surface behaviors (`P1.5b`) depends on the lightweight holdings scope and explicit `base_currency` assumption so first-surface behaviors can render held-state and cost context without inventing brokerage rules.
 - Dynamic watchlists and portfolio overlays (`P4.7`) depends on holdings producing reusable overlay inputs rather than UI-owned ad hoc calculations so later overlay layers can merge portfolio context with watchlists, themes, screens, and subject views consistently.
 
+### 3.18 Portfolio and watchlist first surface behaviors
+
+- Manual watchlist and portfolio-held surfaces reuse the same thin quote-on-read row hydration contract rather than inventing separate quote-fetch behavior for held subjects.
+- Portfolio-held rows layer held-state context, quantity, and optional cost-basis context on top of that shared quote row skeleton.
+- The first surface behavior stays intentionally light: it does not define a portfolio analytics dashboard, brokerage position card, or private quote model distinct from symbol entry.
+- If a subject is both watchlisted and held, the surface keeps both states visible rather than collapsing one concept into the other.
+- Selecting a row from either a watchlist or portfolio-held surface enters the same symbol-detail route keyed by canonical subject identity.
+- Entered subject views may show lightweight saved-state and held-state context plus adjacent actions, but that context augments the existing quote snapshot and subject modules rather than creating a portfolio-specific subject shell.
+- Watchlist and holdings state remain user-owned overlay context on top of shared subject and market-data contracts.
+
+### 3.19 Downstream consumer rules for portfolio and watchlist surface behaviors
+
+- Dynamic watchlists and portfolio overlays (`P4.7`) depends on shared quote-row behavior and stable subject-view augmentation so later theme, screen, portfolio, and watchlist combinations can add more context without rewriting the base surfaces.
+- Export and share policy (`P6.4`) depends on user-owned watchlist and holdings context staying visually and semantically distinct from canonical quote and subject content so later export or share rules can reason about what private overlay state may travel with a shared artifact.
+
 ## 4. Canonical domain model
 
 ### 4.1 Finance identity layer
