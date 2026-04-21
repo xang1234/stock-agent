@@ -76,6 +76,28 @@ Symbol detail is an entered subject workspace with sections such as Overview, Fi
 - Analyze template system (`P4.2`) depends on the explicit boundary between deterministic symbol tabs and later artifact-driven analysis so Analyze can launch from symbol detail without inheriting ownership of overview, financials, or earnings composition.
 - Home feed (`P4.4`) depends on stable symbol-tab destinations and shared subject context so findings and summaries can deep-link into the right deterministic surface instead of inventing custom readouts per card.
 
+### 3.4.4 Holders, signals, and Analyze entry integration
+
+- `holders` remains the deterministic symbol-detail section for institutional and insider holder views tied to the selected subject.
+- `holders` composes structured holder outputs from the fundamentals service and remains distinct from portfolio overlays, watchlist state, and user-owned monitoring context.
+- `signals` remains the symbol-detail section for Reddit-like community views, news pulse, and future alt-data entry points; this bead does not replace that route bucket with a source-specific `reddit` shell contract.
+- Reddit-like or news-specialized content inside `signals` composes evidence-backed blocks, claim clusters, evidence bundles, and trend-style renderers rather than raw social-text panes or provider-specific mini-pages.
+- `Analyze` remains a top-level workspace rather than a durable nested symbol-detail section.
+- Symbol detail launches `Analyze` with carried `SubjectRef` context or an explicit analyze intent, but resulting artifacts live on the shared snapshot and block plane rather than inside a persistent symbol-detail tab.
+
+### 3.4.5 Navigation and handoff rules for holders, signals, and Analyze
+
+- Entering `holders` or `signals` from symbol detail preserves subject context inside the same nested-route family and subject-detail shell.
+- Launching `Analyze` from symbol detail is a workspace transition that still preserves carried subject context and does not reinterpret the subject from raw ticker text.
+- The handoff from symbol detail into `Analyze` stays explicit so later shared-artifact and replay flows can point to durable snapshot-backed artifacts instead of scraped UI state.
+- This bead does not redefine the core deterministic ownership of `overview`, `financials`, or `earnings`; it layers adjacent sections and launch points on top of that contract.
+
+### 3.4.6 Downstream consumer rules for holders, signals, and Analyze entry work
+
+- Analyze template system (`P4.2`) depends on explicit handoff from symbol detail into top-level `Analyze` with carried subject context so template and saved-workflow work can distinguish launch context from tab ownership.
+- Shared artifact flow (`P4.3`) depends on `Analyze` entry from symbol detail producing artifact and snapshot boundaries outside the symbol-detail shell so add-to-chat or replay flows import a sealed artifact instead of scraping tab state.
+- Specialized social and news blocks (`P4.6`) depends on Reddit-like entry living under `signals` and composing shared evidence-backed blocks so specialized social or news views do not redefine the symbol shell or bypass the block registry.
+
 ### 3.5 Analyze
 Analyze is a saved, template-driven workflow with editable instructions, source categories, added subjects, and a memo-style block layout. It renders through the same `BlockRegistry` as chat and can be added to chat.
 
