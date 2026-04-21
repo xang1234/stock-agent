@@ -102,7 +102,7 @@ Symbol detail is an entered subject workspace with sections such as Overview, Fi
 Analyze is a saved, template-driven workflow with editable instructions, source categories, added subjects, and a memo-style block layout. It renders through the same `BlockRegistry` as chat and can be added to chat.
 
 ### 3.6 Watchlists and portfolio
-Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. Portfolio is lightweight holdings tracking, not brokerage execution.
+Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. Portfolio is lightweight holdings tracking for overlay context and monitoring, not brokerage execution.
 
 ### 3.7 Workspace shell and route skeleton
 
@@ -202,6 +202,20 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - Portfolio and watchlist basics (`P1.5`) depends on the simple saved-subject baseline and quote row behavior that later portfolio and holdings surfaces build on.
 - Dynamic watchlists and portfolio overlays (`P4.7`) depends on the manual list baseline that later derivation modes and overlay behavior extend rather than replace.
 - Agent CRUD and scheduling (`P5.1`) depends on a simple, user-owned list object and membership model that later automation or agent creation flows may target without inventing a separate subject collection system.
+
+### 3.16 Portfolio holdings model and overlay inputs
+
+- Portfolio support remains lightweight research context: it tracks held exposure for overlays and monitoring, not brokerage execution, order management, tax lots, cash ledgers, or settlement workflows.
+- A portfolio owns one explicit `base_currency` that defines the reporting currency for holding cost assumptions and later overlay totals.
+- `base_currency` is a reporting and comparison assumption, not proof that the underlying listing trades in that currency and not a full FX accounting model.
+- Holdings persist canonical market subject identity plus quantity, optional cost basis, and open or closed timestamps rather than raw ticker strings, provider payloads, or transaction histories.
+- The holdings model does not require lot-by-lot reconstruction, realized tax accounting, fee capture, margin state, or order history.
+- Manual watchlists and holdings remain separate: saving a subject does not create a holding, and holding a subject does not implicitly add it to a watchlist.
+
+### 3.17 Downstream consumer rules for holdings model and overlay inputs
+
+- Portfolio and watchlist surface behaviors (`P1.5b`) depends on the lightweight holdings scope and explicit `base_currency` assumption so first-surface behaviors can render held-state and cost context without inventing brokerage rules.
+- Dynamic watchlists and portfolio overlays (`P4.7`) depends on holdings producing reusable overlay inputs rather than UI-owned ad hoc calculations so later overlay layers can merge portfolio context with watchlists, themes, screens, and subject views consistently.
 
 ## 4. Canonical domain model
 
@@ -312,6 +326,16 @@ PortfolioHolding {
 - Use `instrument` for security definitions that should survive listing changes, multiple venue representations, and share-class distinctions.
 - Use `listing` for quotes, bars, session state, venue-sensitive performance, trading currency, and symbol-specific market context.
 - `theme`, `macro_topic`, `portfolio`, and `screen` remain valid research subjects, but they do not replace entity identity when the subject is an issuer, instrument, or listing.
+
+### 4.2.1 Portfolio holding and overlay input rules
+
+- `Portfolio` is a user-owned research container, not a brokerage account surrogate.
+- `Portfolio.base_currency` is required and interprets `cost_basis` plus any portfolio-level overlay totals in one explicit reporting currency.
+- `PortfolioHolding` binds to canonical market identity, typically `instrument` or `listing`, and must not persist raw ticker strings or higher-order subjects such as `theme`, `macro_topic`, `portfolio`, or `screen` as holding identity.
+- `cost_basis` is optional and, when present, is interpreted in the containing portfolio's `base_currency`; this bead does not define separate transaction currencies, FX lots, or fee-adjusted basis accounting.
+- Overlay inputs derived from holdings are read models keyed by subject and contributing portfolio, not new canonical subject identities or stored UI payloads.
+- The minimum overlay input contract is held-state, contributing `portfolio_id`, quantity, optional cost basis context, and a base-currency label for any derived valuation or gain/loss display.
+- If multiple portfolios hold the same subject with different base currencies, this bead keeps those contributions distinct rather than silently netting them through an implicit FX layer.
 
 ### 4.3 Metrics and truth objects
 
