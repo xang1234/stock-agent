@@ -824,6 +824,24 @@ Owns symbol typeahead, corpus retrieval, and evidence-bundle assembly.
 ### 6.7 Screening service
 Owns screens, ranking, saved filters, and dynamic universe generation.
 
+### 6.7.1 Screener query model and result contract
+
+- Screener queries are explicit structured filter-and-rank envelopes rather than a freeform analytics DSL or arbitrary user-authored formulas.
+- The minimum query dimensions are universe constraints, market or quote constraints, fundamentals or aggregate constraints, sort specification, and page or limit controls.
+- Query clauses bind to screener-owned fields backed by the market-data and fundamentals services rather than exposing raw provider payload columns or frontend-computed joins.
+- A screener response is an ordered derived result set rather than a new canonical identity type for returned entities.
+- Each result row carries canonical market subject identity, display identity, ranking or sort context, and compact quote or fundamentals summaries sufficient for screener-table rendering.
+- Screener rows remain thinner than symbol-detail hydration: selecting a row hands off canonical subject identity for later subject-entry flows rather than embedding a full symbol workspace payload.
+- A reusable `screen` subject represents the persisted query definition plus ordering semantics, not a frozen list of prehydrated row payloads.
+- The Screener service owns query validation, execution, ranking, pagination, and row-envelope assembly.
+- `/v1/screener/*` remains the client boundary for screener queries and results, even when the service internally reads market-data and fundamentals outputs.
+- Clients must not reconstruct screener tables by fanning out across `/v1/market/*` and `/v1/fundamentals/*` and inventing their own join semantics.
+
+### 6.7.2 Downstream consumer rules for screener query work
+
+- Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so browse, refine, save, and subject-entry flows can stay thin and avoid inventing a second client-side screener model.
+- Dynamic watchlists and portfolio overlays (`P4.7`) depends on screen definitions remaining replayable, service-owned query objects so later dynamic watchlists can regenerate a screen universe without scraping transient UI state or storing raw row payloads as truth.
+
 ### 6.8 Home feed service
 Owns cross-agent findings feed generation, cluster dedupe, and ranking.
 
