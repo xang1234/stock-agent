@@ -4,14 +4,10 @@ This document is the concrete implementation companion to the architecture plan.
 
 ## 1. Scope
 
-The system is a desktop-first research terminal with six primary surfaces:
+The system is a desktop-first research terminal with five primary top-level workspaces and one entered subject-detail surface family:
 
-- Home
-- Agents
-- Chat
-- Screener
-- Symbol detail
-- Analyze
+- Primary top-level workspaces: Home, Agents, Chat, Screener, Analyze
+- Entered subject-detail surfaces: Symbol detail
 
 The app is built around three subsystems on one evidence plane:
 
@@ -57,6 +53,12 @@ Chat is the flagship research interface. Assistant messages are strict `Block[]`
 ### 3.4 Symbol detail
 Symbol detail is an entered subject workspace with sections such as Overview, Financials, Earnings, Holders, and Signals. It may launch into top-level `Analyze` with carried subject context.
 
+### 3.5 Analyze
+Analyze is a saved, template-driven workflow with editable instructions, source categories, added subjects, and a memo-style block layout. It renders through the same `BlockRegistry` as chat and can be added to chat.
+
+### 3.6 Watchlists and portfolio
+Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. Portfolio is lightweight holdings tracking, not brokerage execution.
+
 ### 3.7 Workspace shell and route skeleton
 
 - The app uses one persistent workspace shell rather than surface-specific chrome for each page.
@@ -88,12 +90,6 @@ Symbol detail is an entered subject workspace with sections such as Overview, Fi
 - Thread coordinator and transport (`P2.1`) depends on `Chat` being a primary workspace inside the persistent shell.
 - Analyze workspace surfaces (`P4.4`) depends on `Analyze` being top-level while still accepting deep-linked subject context.
 - Right-rail activity (`P4.5`) depends on the shell-owned right-rail slot and selective default population.
-
-### 3.5 Analyze
-Analyze is a saved, template-driven workflow with editable instructions, source categories, added subjects, and a memo-style block layout. It renders through the same `BlockRegistry` as chat and can be added to chat.
-
-### 3.6 Watchlists and portfolio
-Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. Portfolio is lightweight holdings tracking, not brokerage execution.
 
 ## 4. Canonical domain model
 
