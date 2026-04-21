@@ -92,6 +92,32 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - Analyze workspace surfaces (`P4.4`) depends on `Analyze` being top-level while still accepting deep-linked subject context.
 - Right-rail activity (`P4.5`) depends on the shell-owned right-rail slot and selective default population.
 
+### 3.10 Auth session and navigation guardrails
+
+- The persistent workspace shell is not auth-gated as a whole. Unauthenticated users may enter the shell and navigate public research routes.
+- Public browsing surfaces are `Home`, `Screener`, top-level `Analyze` entry, and entered symbol-detail routes.
+- Public browsing may render market data, fundamentals, findings, and subject context that do not depend on user-owned state or persisted session history.
+- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlists, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
+- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render public entry and carried `SubjectRef` context, while saving or reopening persisted runs requires a session.
+- Protected workspaces and routes use soft in-shell guards rather than replacing the shell with a separate auth-page model.
+- Unauthenticated navigation to `Chat`, `Agents`, watchlists, or any other session-scoped route keeps shell chrome visible and replaces protected main-canvas content with an auth gate for that destination.
+- The guard preserves intended destination context so successful sign-in can resume the same workspace, thread, agent view, watchlist view, or persisted run target.
+- Public routes may launch protected actions through inline auth interrupts. Examples include `save to watchlist`, `start chat`, `open persisted run`, and any action that would create or reveal user-owned state.
+- Inline auth interrupts preserve the current public route plus the pending action payload so sign-in can resume the action instead of forcing a route change.
+- If a session expires or the user logs out inside a protected surface, protected content collapses to the same in-shell auth gate rather than redirecting away.
+- Session loss preserves return-to context for the current protected route, but it must not continue rendering user-owned content after invalidation.
+- Public routes remain navigable after logout or expiry without reconstructing the shell.
+- Public surfaces continue to render public research context while protected panels and actions re-gate in place.
+- The shell remains the durable navigation frame regardless of auth state; auth changes what the main canvas may reveal or mutate.
+- This contract is written in terms of authenticated session scope rather than a specific identity or entitlement backend.
+
+### 3.11 Downstream consumer rules for auth and session work
+
+- Symbol overview and subject detail (`P1.3`) depends on the rule that entered subject detail may render public market, fundamentals, findings, and subject context without requiring a session.
+- Screener surface and saved-screen handoff (`P1.4`) depends on `Screener` remaining publicly browsable inside the persistent shell while saved outputs and user-scoped handoffs require a session.
+- Thread coordinator and transport (`P2.1`) depends on `Chat` being session-scoped even though it lives inside the same persistent shell as public routes.
+- Agent management and scheduling (`P5.1`) depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
+
 ## 4. Canonical domain model
 
 ### 4.1 Finance identity layer
