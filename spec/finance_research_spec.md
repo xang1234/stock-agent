@@ -73,6 +73,7 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 ### 3.8 Symbol-detail route skeleton
 
 - Primary workspace route groups are `home`, `agents`, `chat`, `screener`, and `analyze`.
+- These workspace route groups describe app navigation, not `/v1/*` HTTP endpoint groups.
 - `Chat` remains thread-scoped rather than symbol-scoped because threads may span themes, multiple subjects, or imported Analyze artifacts.
 - Symbol detail is an entered route group keyed by canonical subject identity rather than a primary left-nav workspace.
 - Entering symbol detail swaps the main canvas into a subject-detail shell while preserving the surrounding shell chrome.
@@ -580,7 +581,7 @@ Owns email, push, SMS, and digest delivery.
 
 The normative API surface is defined in `finance_research_openapi.yaml`.
 
-Top-level route groups:
+Top-level API endpoint groups:
 - `/v1/subjects/*`
 - `/v1/market/*`
 - `/v1/fundamentals/*`

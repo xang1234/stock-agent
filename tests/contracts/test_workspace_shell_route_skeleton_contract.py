@@ -9,6 +9,19 @@ SPEC_PATH = ROOT / "spec" / "finance_research_spec.md"
 class WorkspaceShellRouteSkeletonContractTest(unittest.TestCase):
     def test_spec_declares_persistent_shell_and_primary_workspaces(self) -> None:
         spec_text = SPEC_PATH.read_text()
+        self.assertIn(
+            "The system is a desktop-first research terminal with five primary top-level workspaces and one entered subject-detail surface family:",
+            spec_text,
+        )
+        self.assertIn(
+            "Primary top-level workspaces: Home, Agents, Chat, Screener, Analyze",
+            spec_text,
+        )
+        self.assertIn("Entered subject-detail surfaces: Symbol detail", spec_text)
+        self.assertNotIn(
+            "The system is a desktop-first research terminal with six primary surfaces:",
+            spec_text,
+        )
         self.assertIn("### 3.7 Workspace shell and route skeleton", spec_text)
         self.assertIn(
             "The app uses one persistent workspace shell rather than surface-specific chrome for each page.",
@@ -20,6 +33,10 @@ class WorkspaceShellRouteSkeletonContractTest(unittest.TestCase):
         )
         self.assertIn(
             "Left navigation holds the primary workspaces: `Home`, `Agents`, `Chat`, `Screener`, and `Analyze`.",
+            spec_text,
+        )
+        self.assertIn(
+            "`Analyze` is a top-level workspace rather than only a symbol-detail tab.",
             spec_text,
         )
         self.assertIn(
@@ -49,6 +66,10 @@ class WorkspaceShellRouteSkeletonContractTest(unittest.TestCase):
         self.assertIn("### 3.8 Symbol-detail route skeleton", spec_text)
         self.assertIn(
             "Primary workspace route groups are `home`, `agents`, `chat`, `screener`, and `analyze`.",
+            spec_text,
+        )
+        self.assertIn(
+            "These workspace route groups describe app navigation, not `/v1/*` HTTP endpoint groups.",
             spec_text,
         )
         self.assertIn(
@@ -83,6 +104,7 @@ class WorkspaceShellRouteSkeletonContractTest(unittest.TestCase):
     def test_spec_declares_shell_downstream_consumers(self) -> None:
         spec_text = SPEC_PATH.read_text()
         self.assertIn("### 3.9 Downstream consumer rules for shell and route work", spec_text)
+        self.assertIn("Top-level API endpoint groups:", spec_text)
         self.assertIn(
             "Symbol search and quote snapshot surface (`P0.4`) depends on the distinction between primary workspaces and entered symbol-detail routes.",
             spec_text,
