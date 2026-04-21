@@ -627,6 +627,32 @@ Owns issuer, instrument, listing, theme, macro-topic, and subject resolution.
 ### 6.2 Market data service
 Owns quotes, bars, corporate actions, aligned performance series, and market session state.
 
+### 6.2.1 Quote and bar provider abstraction
+
+- Market data service is the sole internal boundary for quote and bar provider interaction.
+- Downstream consumers call the market data service or analyst tools rather than provider SDKs, raw provider endpoints, or provider-specific payload helpers.
+- Quote and bar retrieval start from listing-appropriate hydrated subject context or a listing `SubjectRef`, not from raw ticker strings, venue text, or provider identifiers standing in for canonical market identity.
+- Provider adapters normalize provider-specific response shapes, identifiers, rate limits, and availability quirks into stable internal market records before those records reach downstream consumers.
+- The provider-neutral contract preserves `as_of`, `delay_class`, `currency`, and `source_id` for quote and bar retrieval, plus `adjustment_basis` whenever a bar response has already crossed an adjustment boundary.
+- Corporate actions remain part of the market data service domain, but this bead only establishes that provider normalization may depend on them; adjusted-series and cache semantics belong to `P1.1b`.
+- Quote retrieval owns the latest listing-oriented market snapshot for a tradable subject.
+- The normalized quote contract covers latest price, absolute move, percentage move, freshness or session state, `as_of`, `delay_class`, `currency`, and `source_id`.
+- Quote retrieval is lightweight and snapshot-oriented; it does not answer historical range questions, adjusted-series questions, or comparison normalization.
+- When the hydrated subject bundle also carries issuer context, quote retrieval still resolves the active market snapshot from listing context rather than treating issuer identity as sufficient on its own.
+- Provider failures, stale data, or missing market coverage should surface as normalized market-data availability outcomes rather than raw provider error payloads leaking to callers.
+- Bar retrieval owns ordered intraday and historical OHLCV series for a listing-oriented subject across a requested range and interval.
+- The normalized bar contract exposes requested subject identity, range, interval, `as_of`, `delay_class`, `currency`, `source_id`, and `adjustment_basis`.
+- Bar retrieval owns provider normalization for ordered timestamps, venue-sensitive session interpretation, and basic corporate-action-aware bar shaping needed to produce one stable internal series shape.
+- This bead does not define which adjustment policies are available to users or how cache keys are formed; it only requires the bar contract to make the resulting adjustment basis explicit whenever bars are served.
+- Comparison charts, adjusted-series APIs, and snapshot-safe transform rules consume this bar contract later rather than bypassing it with provider-specific chart fetches.
+
+### 6.2.2 Downstream consumer rules for quote and bar provider abstraction
+
+- Adjusted series query and caching surface (`P1.1b`) depends on the provider-neutral quote and bar boundary, normalized market metadata fields, and the explicit split between snapshot reads and ordered time-series retrieval.
+- Symbol detail surfaces (`P1.3`) depends on a stable quote snapshot contract and reusable bar retrieval boundary so symbol modules do not embed provider-specific market fetch logic.
+- Pre-resolve router and budget policy (`P2.2`) depends on the distinction between lightweight quote reads and heavier historical-bar reads so routing and budget policy can choose the right market-data cost class without guessing from provider names or ticker text.
+- Scale hardening (`P6.5`) depends on a provider-neutral market-data seam with explicit freshness and source metadata so bottleneck audits, caching, and hardening work optimize the boundary rather than coupling consumers to one upstream vendor.
+
 ### 6.3 Fundamentals service
 Owns company profile, statements, ratios, holders, insiders, estimates, and fiscal-calendar normalization.
 
