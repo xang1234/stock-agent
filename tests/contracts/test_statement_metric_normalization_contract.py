@@ -61,7 +61,7 @@ class StatementMetricNormalizationContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Stats, segment, and consensus aggregations (`P1.2b`) depends on normalized issuer statement facts and canonical metric ownership so later aggregation families build on one shared value layer instead of restating statement normalization rules.",
+            "Later aggregation layer (`P1.2b`) consumes normalized issuer statement facts and canonical metrics so later aggregation work builds on one shared value layer without redefining statement normalization.",
             spec_text,
         )
         self.assertIn(

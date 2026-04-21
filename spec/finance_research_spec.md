@@ -695,7 +695,7 @@ Owns company profile, statements, ratios, holders, insiders, estimates, and fisc
 
 ### 6.3.2 Downstream consumer rules for statement and metric normalization
 
-- Stats, segment, and consensus aggregations (`P1.2b`) depends on normalized issuer statement facts and canonical metric ownership so later aggregation families build on one shared value layer instead of restating statement normalization rules.
+- Later aggregation layer (`P1.2b`) consumes normalized issuer statement facts and canonical metrics so later aggregation work builds on one shared value layer without redefining statement normalization.
 - Symbol detail surfaces (`P1.3`) depends on normalized statement outputs carrying explicit basis, period, and coverage semantics so overview, financials, and earnings tabs can render trustworthy tables and charts.
 - Pre-resolve router and budget policy (`P2.2`) depends on the issuer-oriented normalization boundary so routing can distinguish fundamentals reads from market-data reads before the tool loop starts.
 - Promotion rules for candidate facts (`P3.5`) depends on the rule that normalized statement values become `Fact` or `Computation` objects rather than a separate fundamentals-only truth store, so promotion and supersession work target the canonical value plane.

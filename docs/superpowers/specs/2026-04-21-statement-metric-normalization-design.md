@@ -44,9 +44,9 @@ This design does not define segment aggregations, analyst consensus, comparison-
 
 ## Downstream Consumer Matrix
 
-### Stats, segment, and consensus aggregations (`P1.2b`)
+### Later aggregation layer (`P1.2b`)
 
-- `P1.2b` depends on normalized issuer statement facts and canonical metric ownership so later aggregation families build on one shared value layer instead of restating statement normalization rules.
+- `P1.2b` consumes normalized issuer statement facts and canonical metrics so later aggregation work builds on one shared value layer without redefining statement normalization.
 
 ### Symbol detail surfaces (`P1.3`)
 
