@@ -635,21 +635,32 @@ The normative analyst tool registry is in `finance_research_tool_registry.json`.
 
 ## 10. Snapshot semantics
 
-A snapshot pins:
-- subject set
-- `as_of`
-- basis
-- normalization
-- coverage start
-- source set
-- fact / claim / event refs
-- allowed transforms
+### 10.1 Sealed snapshot manifest
 
-Transforms are allowed inside a sealed snapshot only when they preserve the subject set and do not require fresher evidence than `as_of`.
+- A sealed snapshot pins the subject set, `as_of`, basis, normalization, coverage window, source set, bound fact / claim / event refs, and exact `allowed_transforms`.
+- `allowed_transforms` is explicit manifest state, not a UI guess derived from block kind alone.
+- Snapshot sealing happens only after binding and disclosure verification.
+- Persisted chat and analyze artifacts must continue to point at that sealed snapshot rather than reconstructing support opportunistically later.
 
-Example:
-- changing `YTD` to `1Y` on a performance chart is allowed if the requested range end is less than or equal to `as_of`
-- changing peers or basis is not allowed in-snapshot and requires refresh or a new run
+### 10.2 In-snapshot transforms
+
+- A transform is legal inside a sealed snapshot only when it preserves the subject set and does not require fresher evidence than `as_of`.
+- In-snapshot transforms may change presentation or range only when the required rows or series are already inside the sealed data boundary.
+- Changing `YTD` to `1Y` on a performance chart is allowed only if the requested range end is less than or equal to `as_of`.
+- The manifest, not the client, determines whether a transform is allowed.
+
+### 10.3 Refresh and new-run boundary
+
+- Any request that changes subject membership, peer set, basis, normalization, or freshness crosses the snapshot boundary.
+- Requests for fresher data, different peers, different basis, or different normalization require refresh or a new run.
+- Crossing the snapshot boundary must be explicit rather than a silent mutation of a sealed answer.
+
+### 10.4 Downstream consumer rules for snapshot semantics
+
+- Block registry versioning and validation (`P2.3`) depends on snapshot rules being stable enough to know which interactions are legal within existing block bindings and which require a new backend result.
+- Snapshot assembler and verifier (`P2.4`) depends on the sealed manifest contents, sealing order, and refresh boundary to prove that rendered blocks still correspond to the same evidence-backed snapshot.
+- Shared artifact flow (`P4.3`) depends on sealed snapshots remaining reusable product artifacts.
+- Frontend renderer (`PX.3`) depends on presentation-only interactions staying local only when they remain inside the sealed snapshot contract.
 
 ## 11. Key workflows
 
