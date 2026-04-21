@@ -232,6 +232,23 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - Dynamic watchlists and portfolio overlays (`P4.7`) depends on shared quote-row behavior and stable subject-view augmentation so later theme, screen, portfolio, and watchlist combinations can add more context without rewriting the base surfaces.
 - Export and share policy (`P6.4`) depends on user-owned watchlist and holdings context staying visually and semantically distinct from canonical quote and subject content so later export or share rules can reason about what private overlay state may travel with a shared artifact.
 
+### 3.20 Screener surface flow and saved-screen handoff
+
+- `Screener` remains a primary workspace for building, refining, and viewing one active screen definition plus its current result set inside the persistent shell.
+- The screener surface keeps query controls and result rows in one workspace flow rather than splitting query editing, results, and saved screens into separate primary surfaces.
+- Public screener browsing may execute and refine unsaved screens without requiring a session, reusing the public-route and backend-owned screener query contract already defined elsewhere.
+- Saving a screen, opening a user-owned saved screen, or mutating saved-screen metadata requires a session and uses the existing in-shell auth interrupt and resume behavior rather than leaving the screener route family.
+- Saving a screen persists the replayable screen definition, user-owned screen record, and ordering semantics rather than a frozen cache of row payloads or a detached export artifact.
+- Reopening a saved screen restores the screener workspace with the saved screen definition as the active query context and rehydrates results through the screener service rather than replaying stale table rows from client storage.
+- Selecting a screener result row hands off canonical subject identity into the existing symbol-detail entry flow rather than opening a screener-specific quote view or embedding a full subject workspace inline.
+- Handoffs from screener into later list or theme workflows carry explicit `screen` context or the saved query definition as the source reference so downstream derivation and theme flows can explain where a generated universe came from.
+- This bead does not define dynamic watchlist derivation rules, theme membership inference, or bulk portfolio-overlay behavior; it only defines the screener surface flow and saved-screen handoff seam.
+
+### 3.21 Downstream consumer rules for screener surface work
+
+- Themes and macro subjects (`P4.1`) depends on screen-to-theme or derived-universe handoffs carrying explicit screen source context so later theme workflows can distinguish screen-derived membership inputs from manual or inferred membership.
+- Dynamic watchlists and portfolio overlays (`P4.7`) depends on saved screens remaining replayable user-owned screen definitions with explicit source handoff so later dynamic watchlists can regenerate and explain screen-derived lists without scraping transient screener UI state.
+
 ## 4. Canonical domain model
 
 ### 4.1 Finance identity layer
