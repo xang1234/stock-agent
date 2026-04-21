@@ -53,6 +53,29 @@ Chat is the flagship research interface. Assistant messages are strict `Block[]`
 ### 3.4 Symbol detail
 Symbol detail is an entered subject workspace with sections such as Overview, Financials, Earnings, Holders, and Signals. It may launch into top-level `Analyze` with carried subject context.
 
+### 3.4.1 Overview, financials, and earnings tab composition
+
+- `overview` owns the deterministic single-subject summary that extends the thin quote landing state into a durable core tab.
+- `overview` composes listing-aware quote context, company profile context, key stats, and a limited performance or context summary, but it does not become a second home for full statement tables, holders, or interpretive evidence flows.
+- `financials` owns normalized statement tables, statement-linked trend views, and segment-aware financial breakdowns for the selected subject.
+- `financials` composes normalized statement outputs plus the aggregation layer for key stats and segment facts rather than rebuilding fundamentals logic from provider-specific payloads.
+- `earnings` owns deterministic earnings chronology, expectation-versus-result views, and consensus summaries for the selected subject.
+- `earnings` composes earnings-release events, EPS surprise history, analyst consensus, and price-target context without turning transcript reading, news clustering, or freeform commentary into tab-owned responsibilities.
+
+### 3.4.2 Shared dependencies and navigation expectations for core symbol tabs
+
+- All three tabs live inside the same subject-detail shell and share the same subject header context, nested-route navigation model, and public-route assumptions already established for symbol detail.
+- The core tab composition depends on hydrated subject identity, market quote and series services, fundamentals profile and statement services, aggregation outputs, and structured earnings events through backend contracts rather than direct provider payloads or chat-style tool loops.
+- Moving between `overview`, `financials`, and `earnings` preserves subject context and shell chrome; it is a local section transition, not a new top-level workspace or a fresh subject-resolution flow.
+- The tabs may link to one another through stable section destinations, but they must not collapse into one scrolling page or duplicate ownership of the same deterministic modules.
+- Holders, signals or Reddit, and Analyze entry points remain outside this bead and layer onto the subject-detail shell after the core tab responsibilities are fixed.
+
+### 3.4.3 Downstream consumer rules for core symbol tabs
+
+- Holders, Reddit, and Analyze tab integration (`P1.3b`) depends on `overview`, `financials`, and `earnings` having stable deterministic responsibilities so later holders, Reddit, and Analyze entry points can attach without redefining the core symbol-detail tabs.
+- Analyze template system (`P4.2`) depends on the explicit boundary between deterministic symbol tabs and later artifact-driven analysis so Analyze can launch from symbol detail without inheriting ownership of overview, financials, or earnings composition.
+- Home feed (`P4.4`) depends on stable symbol-tab destinations and shared subject context so findings and summaries can deep-link into the right deterministic surface instead of inventing custom readouts per card.
+
 ### 3.5 Analyze
 Analyze is a saved, template-driven workflow with editable instructions, source categories, added subjects, and a memo-style block layout. It renders through the same `BlockRegistry` as chat and can be added to chat.
 
