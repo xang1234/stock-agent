@@ -534,13 +534,32 @@ A document can mention multiple subjects. The reasoning unit is the claim plus i
 ### 6.1 Identity and resolver service
 Owns issuer, instrument, listing, theme, macro-topic, and subject resolution.
 
+- The resolver is the deterministic boundary that converts user-entered lookup input and provider-origin identity records into canonical finance identity outputs.
+- The resolver owns normalization, candidate generation, canonical reference selection when unambiguous, and explicit ambiguity preservation when multiple canonical targets remain plausible.
+- The resolver is distinct from search UI, user disambiguation flow, and downstream subject hydration.
+- Every successful resolver path must end in explicit canonical refs rather than ticker strings or raw provider ids standing in for identity.
+- The resolver must promote lookup handles into issuer, instrument, listing, or `SubjectRef` outputs that downstream systems can persist and join on safely.
+- The contract defines a typed resolution envelope rather than an untyped candidate list.
+- `resolved` means the resolver can name one canonical target confidently enough for deterministic downstream use.
+- `ambiguous` means multiple canonical issuer, instrument, listing, or `SubjectRef` targets remain plausible after normalization and matching, so the resolver must return ranked candidates without silently picking one.
+- `not_found` means the resolver could normalize the input but could not map it to a supported canonical target.
+- The contract explicitly covers two input families: user-entered lookup text and provider-origin identity records.
+- User-entered lookup text includes ticker-like strings, issuer names, aliases, and other concise finance lookup inputs.
+- Provider-origin identity records include external ids and structured provider payload fields such as ticker, exchange, CIK, ISIN, or other identifier-bearing records.
+- The resolver must normalize input before matching, but normalization must not erase identity-level distinctions between issuer, instrument, and listing.
+- The resolver may start from ticker or alias lookup, but downstream output must promote that lookup into explicit issuer, instrument, listing, or `SubjectRef` candidates.
+- Ticker-only identity remains insufficient because the same symbol can map to different listings, venues, or securities, and issuer-level workflows often need a different canonical target than market-data workflows.
+- The resolver should expose the ambiguity axis when possible, such as issuer-versus-listing ambiguity or multiple plausible listings for one ticker string.
+- Ranked candidates are advisory metadata, not permission to silently collapse ambiguity into one winner.
+- `resolved` should include the canonical identity level that was chosen so downstream systems know whether they received issuer, instrument, listing, or already-formed `SubjectRef` output.
+
 ### 6.1.1 Downstream consumer rules
 
-- Resolver service resolves aliases, tickers, and external identifiers into explicit issuer, instrument, or listing candidates and must preserve ambiguity when multiple listings are plausible.
-- Market data service keys quotes, bars, corporate actions, session state, and venue-sensitive performance on `listing`, with any rollup to `instrument` called out explicitly.
-- Fundamentals service keys issuer profile, filing-backed statements, ratios, holders, insiders, estimates, and fiscal normalization on `issuer`, with instrument metadata attached only when the metric is security-specific.
-- Chat and Analyze persist subject context as SubjectRef[] even when the user entered a ticker or company alias.
-- Agent definitions, runs, findings, and subscriptions carry `SubjectRef[]` so monitoring survives ticker changes, cross-listings, ADRs, and dual-class structures.
+- Search-to-subject resolution flow (`P0.3b`) depends on the resolver outcome vocabulary it will carry through candidate search, user choice, and downstream subject hydration.
+- Market data service (`P1.1`) depends on the rule that quote and bar consumers must receive listing-appropriate canonical output rather than ticker strings or issuer-level guesses.
+- Fundamentals service (`P1.2`) depends on the rule that issuer-backed fundamentals cannot rely on ticker-only identity and must consume issuer-appropriate canonical output or preserved ambiguity.
+- Screener surface and saved-screen handoff depends on deterministic subject identity shapes even before later hydration flow is applied.
+- Pre-resolve router and budget policy (`P2.2`) depends on the rule that deterministic pre-resolve routing consumes resolver envelopes rather than asking the model to silently choose among ambiguous identity candidates.
 
 ### 6.2 Market data service
 Owns quotes, bars, corporate actions, aligned performance series, and market session state.
