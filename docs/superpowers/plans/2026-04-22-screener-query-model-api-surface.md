@@ -66,7 +66,15 @@ class ScreenerQueryModelApiSurfaceContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
+            "A reusable `screen` subject represents the persisted query definition plus ordering semantics, not a frozen list of prehydrated row payloads.",
+            spec_text,
+        )
+        self.assertIn(
             "The Screener service owns query validation, execution, ranking, pagination, and row-envelope assembly.",
+            spec_text,
+        )
+        self.assertIn(
+            "`/v1/screener/*` remains the client boundary for screener queries and results, even when the service internally reads market-data and fundamentals outputs.",
             spec_text,
         )
         self.assertIn(
@@ -78,7 +86,7 @@ class ScreenerQueryModelApiSurfaceContractTest(unittest.TestCase):
         spec_text = SPEC_PATH.read_text()
         self.assertIn("### 6.7.2 Downstream consumer rules for screener query work", spec_text)
         self.assertIn(
-            "Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so browse, refine, save, and subject-entry flows can stay thin and avoid inventing a second client-side screener model.",
+            "Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so later screener surface and saved-screen work can reuse one service-owned screener contract instead of inventing a second client-side model.",
             spec_text,
         )
         self.assertIn(
@@ -127,7 +135,7 @@ git commit -m "test: add screener query model contract checks"
 
 ### 6.7.2 Downstream consumer rules for screener query work
 
-- Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so browse, refine, save, and subject-entry flows can stay thin and avoid inventing a second client-side screener model.
+- Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so later screener surface and saved-screen work can reuse one service-owned screener contract instead of inventing a second client-side model.
 - Dynamic watchlists and portfolio overlays (`P4.7`) depends on screen definitions remaining replayable, service-owned query objects so later dynamic watchlists can regenerate a screen universe without scraping transient UI state or storing raw row payloads as truth.
 ```
 

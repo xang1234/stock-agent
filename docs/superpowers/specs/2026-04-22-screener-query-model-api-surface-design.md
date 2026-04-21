@@ -42,7 +42,7 @@ This design does not define the visual screener builder, saved-screen navigation
 
 ### Screener UI flow and saved-screen handoff (`P1.4b`)
 
-- `P1.4b` depends on stable query envelopes and result-row semantics so browse, refine, save, and subject-entry flows can stay thin and avoid inventing a second client-side screener model.
+- `P1.4b` depends on stable query envelopes and result-row semantics so later screener surface and saved-screen work can reuse one service-owned screener contract instead of inventing a second client-side model.
 
 ### Dynamic watchlists and portfolio overlays (`P4.7`)
 

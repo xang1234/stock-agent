@@ -839,7 +839,7 @@ Owns screens, ranking, saved filters, and dynamic universe generation.
 
 ### 6.7.2 Downstream consumer rules for screener query work
 
-- Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so browse, refine, save, and subject-entry flows can stay thin and avoid inventing a second client-side screener model.
+- Screener UI flow and saved-screen handoff (`P1.4b`) depends on stable query envelopes and result-row semantics so later screener surface and saved-screen work can reuse one service-owned screener contract instead of inventing a second client-side model.
 - Dynamic watchlists and portfolio overlays (`P4.7`) depends on screen definitions remaining replayable, service-owned query objects so later dynamic watchlists can regenerate a screen universe without scraping transient UI state or storing raw row payloads as truth.
 
 ### 6.8 Home feed service
