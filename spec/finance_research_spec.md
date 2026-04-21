@@ -55,7 +55,39 @@ Agents are scheduled research processes over a universe of `SubjectRef`s. They p
 Chat is the flagship research interface. Assistant messages are strict `Block[]` artifacts, not plain markdown transcripts.
 
 ### 3.4 Symbol detail
-Overview, Financials, Earnings, Holders, Reddit, Analyze.
+Symbol detail is an entered subject workspace with sections such as Overview, Financials, Earnings, Holders, and Signals. It may launch into top-level `Analyze` with carried subject context.
+
+### 3.7 Workspace shell and route skeleton
+
+- The app uses one persistent workspace shell rather than surface-specific chrome for each page.
+- The shell owns three regions: left navigation, main workspace canvas, and a right-rail slot.
+- Left navigation holds the primary workspaces: `Home`, `Agents`, `Chat`, `Screener`, and `Analyze`.
+- Shell chrome persists while moving between those primary workspaces.
+- `Analyze` is a top-level workspace rather than only a symbol-detail tab.
+- The right rail is a shell-owned slot rather than a surface-owned layout invention.
+- `Home`, `Agents`, `Chat`, symbol detail, and `Analyze` use the right rail by default.
+- `Screener` defaults to a denser main-canvas layout and may opt into the rail later without changing the shell contract.
+
+### 3.8 Symbol-detail route skeleton
+
+- Primary workspace route groups are `home`, `agents`, `chat`, `screener`, and `analyze`.
+- `Chat` remains thread-scoped rather than symbol-scoped because threads may span themes, multiple subjects, or imported Analyze artifacts.
+- Symbol detail is an entered route group keyed by canonical subject identity rather than a primary left-nav workspace.
+- Entering symbol detail swaps the main canvas into a subject-detail shell while preserving the surrounding shell chrome.
+- The subject-detail shell owns shared subject header context and local section navigation.
+- Nested routes are the durable model for subject-detail sections.
+- The initial durable subject-detail sections are `overview`, `financials`, `earnings`, `holders`, and `signals`.
+- `signals` is the extensible section for community, sentiment, news pulse, and future alt-data views.
+- Symbol detail may deep-link into top-level `Analyze` with carried `SubjectRef` context or a prefilled analyze intent.
+
+### 3.9 Downstream consumer rules for shell and route work
+
+- Symbol search and quote snapshot surface (`P0.4`) depends on the distinction between primary workspaces and entered symbol-detail routes.
+- Symbol overview shell (`P1.3`) depends on the subject-detail shell owning shared identity context and local section navigation.
+- Symbol detail tabs and context modules (`P1.4`) depend on durable nested-route buckets inside the subject-detail shell.
+- Thread coordinator and transport (`P2.1`) depends on `Chat` being a primary workspace inside the persistent shell.
+- Analyze workspace surfaces (`P4.4`) depends on `Analyze` being top-level while still accepting deep-linked subject context.
+- Right-rail activity (`P4.5`) depends on the shell-owned right-rail slot and selective default population.
 
 ### 3.5 Analyze
 Analyze is a saved, template-driven workflow with editable instructions, source categories, added subjects, and a memo-style block layout. It renders through the same `BlockRegistry` as chat and can be added to chat.
