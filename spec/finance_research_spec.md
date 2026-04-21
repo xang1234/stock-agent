@@ -118,6 +118,27 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - Thread coordinator and transport (`P2.1`) depends on `Chat` being session-scoped even though it lives inside the same persistent shell as public routes.
 - Agent management and scheduling depends on `Agents` and related user-owned configuration flows being session-scoped workspaces.
 
+### 3.12 Symbol search and quote snapshot surface
+
+- The persistent workspace shell owns the primary symbol search entry rather than delegating search behavior to each surface.
+- Later flows such as add-to-watchlist or portfolio entry reuse the same shell-owned search contract rather than redefining symbol search per surface.
+- Candidate handling reuses the existing search-to-subject flow: unique deterministic hits may auto-advance, ambiguous hits require explicit choice, and `not_found` ends without subject hydration.
+- A successful subject resolution enters symbol detail rather than opening a detached quote page or staying inline in the originating workspace.
+- The main canvas swaps into the entered subject-detail shell while preserving the surrounding workspace shell.
+- The first quote snapshot is the initial landing state of entered symbol detail rather than a competing top-level workspace.
+- The required landing content is a market identity strip plus a price-first quote snapshot.
+- That minimum quote snapshot includes canonical subject display identity, listing-sensitive trading symbol context, latest price, absolute move, percentage move, freshness or session state, and a small recent-range or chart hook.
+- Quote retrieval is listing-oriented even when the hydrated subject bundle also carries issuer context.
+- A light issuer summary or profile companion is allowed when available, but it is best-effort and must not block the landing state.
+- Lightweight downstream affordances such as watchlist entry or deeper symbol navigation may appear here, but they do not define full watchlist management or full symbol modules.
+- This bead does not define earnings, holders, filings, peer tables, or a finished overview surface.
+
+### 3.13 Downstream consumer rules for early symbol entry work
+
+- Manual watchlist management baseline (`P0.4b`) depends on the reusable search entry and selected-subject handoff that manual watchlist actions will sit on top of.
+- Portfolio and watchlist basics (`P1.5`) depends on the first quote and subject-entry behavior that later portfolio and watchlist basics reuse before overlays exist.
+- Symbol overview shell (`P1.3`) depends on entered symbol detail having a thin initial landing state before fuller overview, financials, and earnings composition is defined.
+
 ## 4. Canonical domain model
 
 ### 4.1 Finance identity layer
