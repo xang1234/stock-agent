@@ -139,6 +139,25 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - Portfolio and watchlist basics (`P1.5`) depends on the first quote and subject-entry behavior that later portfolio and watchlist basics reuse before overlays exist.
 - Symbol overview shell (`P1.3`) depends on entered symbol detail having a thin initial landing state before fuller overview, financials, and earnings composition is defined.
 
+### 3.14 Manual watchlist management baseline
+
+- The product starts from one implicit default manual watchlist as the baseline saved-subject model.
+- The manual baseline CRUD floor is membership-only: view current members, add a resolved subject, and remove a saved subject.
+- This bead does not define create-list, rename-list, delete-list, sharing, reordering, or multiple manual lists.
+- The persisted membership unit is canonical subject identity rather than raw ticker strings or stored quote payloads.
+- Membership is idempotent at the subject level, so adding the same canonical subject twice does not create duplicates.
+- Manual watchlist rows hydrate quote context on read from saved canonical subject identity rather than storing quote payloads in membership records.
+- The row hydration contract is lightweight: subject display identity, listing-sensitive symbol context when applicable, latest price, absolute move, percentage move, and freshness or session state.
+- Quote row hydration reuses the same listing-oriented market identity rule as early symbol entry rather than inventing a watchlist-specific quote identity model.
+- Add-to-watchlist from public subject routes uses the existing inline auth interrupt contract: if the user is unauthenticated, the current route and pending resolved subject are preserved and the add resumes after sign-in.
+- Removing a member changes watchlist membership only and does not mutate the underlying subject, quote snapshot, or later portfolio overlay state.
+
+### 3.15 Downstream consumer rules for manual watchlist baseline work
+
+- Portfolio and watchlist basics (`P1.5`) depends on the simple saved-subject baseline and quote row behavior that later portfolio and holdings surfaces build on.
+- Dynamic watchlists and portfolio overlays (`P4.7`) depends on the manual list baseline that later derivation modes and overlay behavior extend rather than replace.
+- Agent CRUD and scheduling (`P5.1`) depends on a simple, user-owned list object and membership model that later automation or agent creation flows may target without inventing a separate subject collection system.
+
 ## 4. Canonical domain model
 
 ### 4.1 Finance identity layer
