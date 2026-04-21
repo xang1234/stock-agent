@@ -97,8 +97,8 @@ Watchlists support `manual`, `screen`, `agent`, `theme`, and `portfolio` modes. 
 - The persistent workspace shell is not auth-gated as a whole. Unauthenticated users may enter the shell and navigate public research routes.
 - Public browsing surfaces are `Home`, `Screener`, top-level `Analyze` entry, and entered symbol-detail routes.
 - Public browsing may render market data, fundamentals, findings, and subject context that do not depend on user-owned state or persisted session history.
-- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlists, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
-- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render public entry and carried `SubjectRef` context, while saving or reopening persisted runs requires a session.
+- Session-scoped workspaces and flows are `Chat`, `Agents`, watchlist views and mutations, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.
+- A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render only a public entry state with carried `SubjectRef` context, while any user-owned draft, save, or persisted-run state requires a session.
 - Protected workspaces and routes use soft in-shell guards rather than replacing the shell with a separate auth-page model.
 - Unauthenticated navigation to `Chat`, `Agents`, watchlists, or any other session-scoped route keeps shell chrome visible and replaces protected main-canvas content with an auth gate for that destination.
 - The guard preserves intended destination context so successful sign-in can resume the same workspace, thread, agent view, watchlist view, or persisted run target.

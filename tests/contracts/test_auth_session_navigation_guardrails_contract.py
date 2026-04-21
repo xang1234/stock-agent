@@ -23,11 +23,11 @@ class AuthSessionNavigationGuardrailsContractTest(unittest.TestCase):
             spec_text,
         )
         self.assertIn(
-            "Session-scoped workspaces and flows are `Chat`, `Agents`, watchlists, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.",
+            "Session-scoped workspaces and flows are `Chat`, `Agents`, watchlist views and mutations, persisted Analyze runs, saved prompts or templates, and any user-owned thread or run history.",
             spec_text,
         )
         self.assertIn(
-            "A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render public entry and carried `SubjectRef` context, while saving or reopening persisted runs requires a session.",
+            "A route may be publicly enterable yet still host protected actions. Top-level `Analyze` may render only a public entry state with carried `SubjectRef` context, while any user-owned draft, save, or persisted-run state requires a session.",
             spec_text,
         )
         self.assertIn(
